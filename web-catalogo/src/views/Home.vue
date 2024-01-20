@@ -19,10 +19,12 @@
         </div>
       </div>
     </div>
+    <DialogProduto :open="true" />
   </div>
 </template>
 
 <script setup lang="ts">
+import DialogProduto from "../components/DialogProduto.vue";
 import Paginacao from "../components/Paginacao.vue";
 const products = [
   {
