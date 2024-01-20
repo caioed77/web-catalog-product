@@ -1,18 +1,23 @@
-import Dashboard from "../views/Dashboard.vue";
 import { createRouter, createWebHashHistory } from "vue-router";
+import Dashboard from "../views/Dashboard.vue";
+import Home from "../views/Home.vue";
 
 const routes = [
   {
     path: "/",
-    component: Dashboard,
+    component: Home,
+  },
+  {
+    path: "/home",
+    component: Home,
   },
   {
     path: "/dashboard",
     component: Dashboard,
     children: [
       {
-        path: "home",
-        component: () => import("../views/Home.vue"),
+        path: "produtos",
+        component: () => import("../views/PageProdutos.vue"),
       },
     ],
   },

@@ -3,9 +3,6 @@
   <div class="min-h-screen flex flex-col h-screen overflow-hidden">
     <!-- main container -->
     <div class="flex-1 flex flex-row overflow-hidden">
-      <nav class="order-first bg-white overflow-hidden">
-        <DashboardSideBar />
-      </nav>
       <main class="flex-1 bg-white overflow-auto">
         <div id="Dashboard" class="bg-white m-0">
           <RouterView />
