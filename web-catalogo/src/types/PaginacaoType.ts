@@ -1,29 +1,27 @@
-import { IProdutos } from "./ProdutosType";
-
-export interface Sort {
+export interface ISort {
   empty: boolean;
   sorted: boolean;
   unsorted: boolean;
 }
 
-export interface Pageable {
+export interface IPageable {
   pageNumber: number;
   pageSize: number;
-  sort: Sort;
+  sort: ISort;
   offset: number;
   paged: boolean;
   unpaged: boolean;
 }
 
-export interface Paginacao {
-  content: IProdutos[];
-  pageable: Pageable;
+export interface IPaginacao<T> {
+  content?: T[];
+  pageable: IPageable;
   totalElements: number;
   totalPages: number;
   last: boolean;
   size: number;
   number: number;
-  sort: Sort;
+  sort: ISort;
   numberOfElements: number;
   first: boolean;
   empty: boolean;
