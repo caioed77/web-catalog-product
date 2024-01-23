@@ -52,13 +52,16 @@ var
   JSONObj: TJSONObject;
   CoresArray: TJSONArray;
   Cor: TJSONValue;
-  const urlListaProduto = 'http://localhost:8080/produtos/listagemProdutos';
-  const urlGravarProduto = 'http://localhost:8080/produtos/gravarProduto';
 
 implementation
 
 {$R *.dfm}
 
+
+procedure TfrmPrincipal.btnGravarProdutoClick(Sender: TObject);
+begin
+  GravarProdutos;
+end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
@@ -68,7 +71,7 @@ begin
   IdHTTP := TIdHTTP.Create(nil);
 
   try
-    Response := IdHTTP.Get(urlListaProduto);
+    Response := IdHTTP.Get('http://localhost:8080/produtos/listagemProdutos');
   finally
     IdHTTP.Free;
   end;
@@ -129,7 +132,7 @@ begin
     ShowMessage(Stream.ToString);
      try
       IdHTTP.Request.ContentType := 'application/json';
-      IdHTTP.Post(urlGravarProduto, Stream);
+      IdHTTP.Post('http://localhost:8080/produtos/gravarProduto', Stream);
     finally
       Stream.Free;
     end;
@@ -183,11 +186,6 @@ begin
   finally
     JSONArray.Free;
   end;
-end;
-
-procedure TfrmPrincipal.btnGravarProdutoClick(Sender: TObject);
-begin
-  GravarProdutos;
 end;
 
 end.
