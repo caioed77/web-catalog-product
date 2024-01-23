@@ -33,6 +33,6 @@ import { retornarProduto } from "../services/ProdutosService";
 const Produtos = ref<IPaginacao<IProdutos | undefined>>();
 
 onMounted(async () => {
-  Produtos.value = await retornarProduto();
+  Produtos.value = await retornarProduto();  
 });
 </script>
