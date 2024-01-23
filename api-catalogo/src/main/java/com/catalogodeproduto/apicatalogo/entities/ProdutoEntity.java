@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +25,10 @@ public class ProdutoEntity {
 
       private Double precoUnitario;
 
+      @Column(length = 500)
       private String imagem;
+
+      @OneToMany(mappedBy = "produtoId")
+      public List<CorProdutoEntity> cores = new ArrayList<>();
 
 }

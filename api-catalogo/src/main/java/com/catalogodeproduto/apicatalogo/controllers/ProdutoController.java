@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/produtos")
 public class ProdutoController {
@@ -39,5 +41,10 @@ public class ProdutoController {
       @GetMapping(value = "/retornarProduto")
       public ResponseEntity<Page<ProdutoDTO>> retornarProdutosPaginado(Pageable pageable) {
             return ResponseEntity.ok(produtoService.retornarProdutos(pageable));
+      }
+
+      @GetMapping(value = "/listagemProdutos")
+      public ResponseEntity<List<ProdutoDTO>> retornaTodosProdutos() {
+            return ResponseEntity.ok(produtoService.listaProdutos());
       }
 }
