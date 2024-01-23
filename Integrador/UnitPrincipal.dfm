@@ -19,7 +19,7 @@ object frmPrincipal: TfrmPrincipal
     Height = 89
     Align = alTop
     TabOrder = 0
-    ExplicitTop = 32
+    ExplicitWidth = 1023
     object Label1: TLabel
       Left = 8
       Top = 32
@@ -46,6 +46,15 @@ object frmPrincipal: TfrmPrincipal
       Font.Style = []
       ParentFont = False
     end
+    object btnGravarProduto: TBitBtn
+      Left = 413
+      Top = 46
+      Width = 75
+      Height = 25
+      Caption = 'Gravar'
+      TabOrder = 0
+      OnClick = btnGravarProdutoClick
+    end
   end
   object Panel2: TPanel
     Left = 0
@@ -55,6 +64,7 @@ object frmPrincipal: TfrmPrincipal
     Align = alLeft
     Alignment = taLeftJustify
     TabOrder = 1
+    ExplicitHeight = 497
     object dbProduto: TDBGrid
       Left = 1
       Top = 1
@@ -78,12 +88,15 @@ object frmPrincipal: TfrmPrincipal
     Align = alRight
     Caption = 'Panel3'
     TabOrder = 2
+    ExplicitLeft = 556
+    ExplicitHeight = 497
     object dbCores: TDBGrid
       Left = 1
       Top = 1
       Width = 465
       Height = 496
       Align = alClient
+      DataSource = dsCores
       TabOrder = 0
       TitleFont.Charset = DEFAULT_CHARSET
       TitleFont.Color = clWindowText
@@ -126,7 +139,8 @@ object frmPrincipal: TfrmPrincipal
       FieldName = 'IMAGEM'
     end
   end
-  object DataSource1: TDataSource
+  object dsCores: TDataSource
+    DataSet = CdsCores
     Left = 192
     Top = 200
   end
@@ -135,17 +149,17 @@ object frmPrincipal: TfrmPrincipal
     Params = <>
     Left = 80
     Top = 192
-    object IntegerField1: TIntegerField
+    object CdsCoresID: TIntegerField
       FieldName = 'ID'
     end
-    object StringField1: TStringField
+    object CdsCoresDESCRICAO: TStringField
       FieldName = 'DESCRICAO'
     end
-    object StringField2: TStringField
+    object CdsCoresIMAGEM: TStringField
       FieldName = 'IMAGEM'
     end
-    object CdsCoresProdutoID: TIntegerField
-      FieldName = 'ProdutoID'
+    object CdsCoresPRODUTO_ID: TIntegerField
+      FieldName = 'PRODUTO_ID'
     end
   end
   object dsProduto: TDataSource

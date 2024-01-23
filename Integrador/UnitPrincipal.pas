@@ -9,22 +9,19 @@ uses
   FireDAC.Phys, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.VCLUI.Wait,
   FireDAC.Comp.Client, Data.DB, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef,
   IdAuthentication, IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
-  IdHTTP, Vcl.StdCtrls, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Datasnap.DBClient, System.JSON;
+  IdHTTP, Vcl.StdCtrls, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Datasnap.DBClient, System.JSON,
+  Vcl.Buttons;
 
 type
   TfrmPrincipal = class(TForm)
     IdHTTP1: TIdHTTP;
     CdsProduto: TClientDataSet;
-    DataSource1: TDataSource;
+    dsCores: TDataSource;
     CdsProdutoID: TIntegerField;
     CdsProdutoDESCRICAO: TStringField;
     CdsProdutoPRECO: TFloatField;
     CdsProdutoIMAGEM: TStringField;
     CdsCores: TClientDataSet;
-    IntegerField1: TIntegerField;
-    StringField1: TStringField;
-    StringField2: TStringField;
-    CdsCoresProdutoID: TIntegerField;
     dsProduto: TDataSource;
     Panel1: TPanel;
     Panel2: TPanel;
@@ -33,9 +30,16 @@ type
     Panel3: TPanel;
     dbCores: TDBGrid;
     Label2: TLabel;
+    CdsCoresID: TIntegerField;
+    CdsCoresDESCRICAO: TStringField;
+    CdsCoresIMAGEM: TStringField;
+    CdsCoresPRODUTO_ID: TIntegerField;
+    btnGravarProduto: TBitBtn;
     procedure FormCreate(Sender: TObject);
+    procedure btnGravarProdutoClick(Sender: TObject);
   private
     procedure PreencheCDSProduto(const JSONString: string);
+    procedure GravarProdutos;
     { Private declarations }
   public
     { Public declarations }
@@ -54,9 +58,16 @@ implementation
 {$R *.dfm}
 
 
+procedure TfrmPrincipal.btnGravarProdutoClick(Sender: TObject);
+begin
+  GravarProdutos;
+end;
+
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
   CdsProduto.CreateDataSet;
+  CdsCores.CreateDataSet;
+
   IdHTTP := TIdHTTP.Create(nil);
 
   try
@@ -68,35 +79,112 @@ begin
   PreencheCDSProduto(Response);
 end;
 
-procedure TfrmPrincipal.PreencheCDSProduto(const JSONString: string);
+procedure TfrmPrincipal.GravarProdutos;
+var
+  JSONToSend: TJSONObject;
+  JSONArrayProdutos, JSONArrayCores: TJSONArray;
+  JSONProduto, JSONCor: TJSONObject;
+  JSONString: string;
+  Stream: TStringStream;
+
 begin
-  JSONObj := TJSONObject.ParseJSONValue(JSONString) as TJSONObject;
+  IdHTTP := TIdHTTP.Create(nil);
+  JSONToSend := TJSONObject.Create;
+  JSONArrayProdutos := TJSONArray.Create;
+  JSONArrayCores := TJSONArray.Create;
+
+  try
+    cdsProduto.First;
+
+    while not cdsProduto.Eof do
+    begin
+      JSONProduto := TJSONObject.Create;
+      JSONProduto.AddPair('id', IntToStr(cdsProdutoID.Value));
+      JSONProduto.AddPair('descricao', cdsProdutoDESCRICAO.Value);
+      JSONProduto.AddPair('precoUnitario', FloatToStr(cdsProdutoPRECO.Value));
+      JSONProduto.AddPair('imagem', cdsProdutoIMAGEM.Value);
+
+      cdsCores.Filter := 'PRODUTO_ID = ' + IntToStr(cdsProdutoID.Value);
+
+      cdsCores.First;
+      while not cdsCores.Eof do
+      begin
+        JSONCor := TJSONObject.Create;
+        JSONCor.AddPair('id', IntToStr(CdsCoresID.Value));
+        JSONCor.AddPair('descricao', cdsCoresDESCRICAO.Value);
+        JSONCor.AddPair('imagem', cdsCoresIMAGEM.Value);
+        JSONArrayCores.AddElement(JSONCor);
+
+        cdsCores.Next;
+      end;
+
+      JSONProduto.AddPair('cores', JSONArrayCores);
+      JSONArrayProdutos.AddElement(JSONProduto);
+
+      cdsProduto.Next;
+    end;
+
+    JSONToSend.AddPair('', JSONArrayProdutos);
+    JSONString := JSONToSend.ToString;
+
+    Stream := TStringStream.Create(JSONString, TEncoding.UTF8);
+
+    ShowMessage(Stream.ToString);
+     try
+      IdHTTP.Request.ContentType := 'application/json';
+      IdHTTP.Post('http://localhost:8080/produtos/gravarProduto', Stream);
+    finally
+      Stream.Free;
+    end;
+
+  finally
+    IdHTTP.Free;
+    JSONToSend.Free;
+  end;
+end;
+
+procedure TfrmPrincipal.PreencheCDSProduto(const JSONString: string);
+var JSONArray: TJSONArray;
+    JSONValue: TJSONValue;
+    JSONObj: TJSONObject;
+    CoresArray: TJSONArray;
+    Cor: TJSONValue;
+begin
+  JSONArray := TJSONObject.ParseJSONValue(JSONString) as TJSONArray;
 
   try
     cdsProduto.EmptyDataSet;
 
-    if not CdsProduto.Locate('ID', JSONObj.GetValue('id').Value, []) then
-      cdsProduto.Append
-    else
-      cdsProduto.Edit;
-
-    CdsProdutoID.Value := StrToInt(JSONObj.GetValue('id').Value);
-    CdsProdutoDESCRICAO.Value := JSONObj.GetValue('descricao').Value;
-    CdsProdutoPRECO.Value := StrToInt(JSONObj.GetValue('precoUnitario').Value);
-    CdsProdutoIMAGEM.Value := JSONObj.GetValue('imagem').Value;
-    cdsProduto.Post;
-
-    cdsCores.EmptyDataSet;
-    CoresArray := JSONObj.GetValue('cores') as TJSONArray;
-
-    for Cor in CoresArray do
+    for JSONValue in JSONArray do
     begin
-      cdsCores.Append;
-      cdsCores.FieldByName('Cor').AsString := Cor.Value;
-      cdsCores.Post;
+      if JSONValue is TJSONObject then
+      begin
+        JSONObj := JSONValue as TJSONObject;
+
+        if not CdsProduto.Locate('ID', JSONObj.GetValue('id').Value, []) then
+          cdsProduto.Append
+        else
+          cdsProduto.Edit;
+
+        CdsProdutoID.Value := StrToIntDef(JSONObj.GetValue('id').Value, 0);
+        CdsProdutoDESCRICAO.Value := JSONObj.GetValue('descricao').Value;
+        CdsProdutoPRECO.Value := StrToFloatDef(JSONObj.GetValue('precoUnitario').Value, 0.0);
+        CdsProdutoIMAGEM.Value := JSONObj.GetValue('imagem').Value;
+        cdsProduto.Post;
+
+        cdsCores.EmptyDataSet;
+        CoresArray := JSONObj.GetValue('cores') as TJSONArray;
+
+        for Cor in CoresArray do
+        begin
+          cdsCores.Append;
+          cdsCores.FieldByName('Cor').AsString := Cor.Value;
+          cdsCores.Post;
+        end;
+      end;
     end;
   finally
-    JSONObj.Free;
+    JSONArray.Free;
   end;
 end;
 
