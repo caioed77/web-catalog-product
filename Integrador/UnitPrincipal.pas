@@ -10,7 +10,8 @@ uses
   FireDAC.Comp.Client, Data.DB, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef,
   IdAuthentication, IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
   IdHTTP, Vcl.StdCtrls, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Datasnap.DBClient, System.JSON,
-  Vcl.Buttons;
+  Vcl.Buttons, Vcl.ComCtrls, Vcl.CustomizeDlg, System.ImageList, Vcl.ImgList,
+  System.Win.TaskbarCore, Vcl.Taskbar;
 
 type
   TfrmPrincipal = class(TForm)
@@ -24,19 +25,34 @@ type
     CdsCores: TClientDataSet;
     dsProduto: TDataSource;
     Panel1: TPanel;
-    Panel2: TPanel;
-    dbProduto: TDBGrid;
     Label1: TLabel;
-    Panel3: TPanel;
-    dbCores: TDBGrid;
-    Label2: TLabel;
     CdsCoresID: TIntegerField;
     CdsCoresDESCRICAO: TStringField;
     CdsCoresIMAGEM: TStringField;
     CdsCoresPRODUTO_ID: TIntegerField;
+    Paginas: TPageControl;
+    Review: TTabSheet;
+    Panel2: TPanel;
+    dbProduto: TDBGrid;
+    Panel3: TPanel;
+    dbCores: TDBGrid;
+    Cadastro: TTabSheet;
+    Label2: TLabel;
+    Label3: TLabel;
+    Panel4: TPanel;
     btnGravarProduto: TBitBtn;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    OpenDialog: TOpenDialog;
+    btnImagem: TBitBtn;
+    edtURLImagem: TEdit;
+    Label4: TLabel;
+    Panel5: TPanel;
+    Label5: TLabel;
+    Label6: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure btnGravarProdutoClick(Sender: TObject);
+    procedure btnImagemClick(Sender: TObject);
   private
     procedure PreencheCDSProduto(const JSONString: string);
     procedure GravarProdutos;
@@ -59,6 +75,17 @@ implementation
 
 {$R *.dfm}
 
+
+procedure TfrmPrincipal.btnImagemClick(Sender: TObject);
+begin
+  if OpenDialog.Execute then
+  begin
+    edtURLImagem.Text := OpenDialog.FileName;
+
+    CdsProduto.Edit;
+    CdsProdutoIMAGEM.Value := edtURLImagem.Text;
+  end;
+end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
@@ -110,6 +137,7 @@ begin
         JSONCor.AddPair('id', IntToStr(CdsCoresID.Value));
         JSONCor.AddPair('descricao', cdsCoresDESCRICAO.Value);
         JSONCor.AddPair('imagem', cdsCoresIMAGEM.Value);
+        JSONCor.AddPair('produto_id', CdsCoresPRODUTO_ID.Value);
         JSONArrayCores.AddElement(JSONCor);
 
         cdsCores.Next;
@@ -121,10 +149,8 @@ begin
       cdsProduto.Next;
     end;
 
-    JSONToSend.AddPair('', JSONArrayProdutos);
-    JSONString := JSONToSend.ToString;
 
-    Stream := TStringStream.Create(JSONString, TEncoding.UTF8);
+    Stream := TStringStream.Create(JSONArrayProdutos.Items[0].ToString, TEncoding.UTF8);
 
     ShowMessage(Stream.ToString);
      try

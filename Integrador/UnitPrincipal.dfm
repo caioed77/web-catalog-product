@@ -10,99 +10,211 @@ object frmPrincipal: TfrmPrincipal
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  Position = poDesktopCenter
   OnCreate = FormCreate
   TextHeight = 15
   object Panel1: TPanel
     Left = 0
     Top = 0
     Width = 1027
-    Height = 89
+    Height = 73
     Align = alTop
     TabOrder = 0
     ExplicitWidth = 1023
     object Label1: TLabel
-      Left = 8
-      Top = 32
-      Width = 107
+      Left = 13
+      Top = 11
+      Width = 255
       Height = 37
-      Caption = 'Produtos'
+      Caption = 'Controle de produtos'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -27
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
-    end
-    object Label2: TLabel
-      Left = 560
-      Top = 32
-      Width = 67
-      Height = 37
-      Caption = 'Cores'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -27
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
-    end
-    object btnGravarProduto: TBitBtn
-      Left = 413
-      Top = 46
-      Width = 75
-      Height = 25
-      Caption = 'Gravar'
-      TabOrder = 0
-      OnClick = btnGravarProdutoClick
     end
   end
-  object Panel2: TPanel
+  object Paginas: TPageControl
     Left = 0
-    Top = 89
-    Width = 489
-    Height = 498
-    Align = alLeft
-    Alignment = taLeftJustify
+    Top = 73
+    Width = 1027
+    Height = 514
+    ActivePage = Review
+    Align = alClient
     TabOrder = 1
-    ExplicitHeight = 497
-    object dbProduto: TDBGrid
-      Left = 1
-      Top = 1
-      Width = 487
-      Height = 496
-      Align = alClient
-      DataSource = dsProduto
-      TabOrder = 0
-      TitleFont.Charset = DEFAULT_CHARSET
-      TitleFont.Color = clWindowText
-      TitleFont.Height = -12
-      TitleFont.Name = 'Segoe UI'
-      TitleFont.Style = []
+    object Review: TTabSheet
+      Caption = 'Review'
+      object Panel2: TPanel
+        Left = 0
+        Top = 41
+        Width = 489
+        Height = 443
+        Align = alLeft
+        Alignment = taLeftJustify
+        TabOrder = 0
+        object dbProduto: TDBGrid
+          Left = 1
+          Top = 1
+          Width = 487
+          Height = 441
+          Align = alClient
+          DataSource = dsProduto
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Segoe UI'
+          TitleFont.Style = []
+        end
+      end
+      object Panel3: TPanel
+        Left = 520
+        Top = 41
+        Width = 499
+        Height = 443
+        Align = alRight
+        Caption = 'Panel3'
+        TabOrder = 1
+        object dbCores: TDBGrid
+          Left = 1
+          Top = 1
+          Width = 497
+          Height = 441
+          Align = alClient
+          DataSource = dsCores
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Segoe UI'
+          TitleFont.Style = []
+        end
+      end
+      object Panel5: TPanel
+        Left = 0
+        Top = 0
+        Width = 1019
+        Height = 41
+        Align = alTop
+        TabOrder = 2
+        object Label5: TLabel
+          Left = 208
+          Top = 14
+          Width = 69
+          Height = 21
+          Caption = 'Produtos'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label6: TLabel
+          Left = 752
+          Top = 14
+          Width = 42
+          Height = 21
+          Caption = 'Cores'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+      end
     end
-  end
-  object Panel3: TPanel
-    Left = 560
-    Top = 89
-    Width = 467
-    Height = 498
-    Align = alRight
-    Caption = 'Panel3'
-    TabOrder = 2
-    ExplicitLeft = 556
-    ExplicitHeight = 497
-    object dbCores: TDBGrid
-      Left = 1
-      Top = 1
-      Width = 465
-      Height = 496
-      Align = alClient
-      DataSource = dsCores
-      TabOrder = 0
-      TitleFont.Charset = DEFAULT_CHARSET
-      TitleFont.Color = clWindowText
-      TitleFont.Height = -12
-      TitleFont.Name = 'Segoe UI'
-      TitleFont.Style = []
+    object Cadastro: TTabSheet
+      Caption = 'Cadastro'
+      ImageIndex = 1
+      object Label2: TLabel
+        Left = 24
+        Top = 87
+        Width = 140
+        Height = 21
+        Caption = 'Descri'#231#227'o produto'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label3: TLabel
+        Left = 24
+        Top = 144
+        Width = 108
+        Height = 21
+        Caption = 'Pre'#231'o unitario'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label4: TLabel
+        Left = 192
+        Top = 141
+        Width = 63
+        Height = 21
+        Caption = 'Imagem'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Panel4: TPanel
+        Left = 0
+        Top = 0
+        Width = 1019
+        Height = 65
+        Align = alTop
+        TabOrder = 0
+        object btnGravarProduto: TBitBtn
+          Left = 229
+          Top = 25
+          Width = 75
+          Height = 25
+          Caption = 'Gravar'
+          TabOrder = 0
+          OnClick = btnGravarProdutoClick
+        end
+      end
+      object Edit1: TEdit
+        Left = 24
+        Top = 110
+        Width = 353
+        Height = 23
+        TabOrder = 1
+      end
+      object Edit2: TEdit
+        Left = 24
+        Top = 168
+        Width = 140
+        Height = 23
+        TabOrder = 2
+      end
+      object btnImagem: TBitBtn
+        Left = 316
+        Top = 167
+        Width = 41
+        Height = 25
+        Caption = 'T'
+        TabOrder = 3
+        OnClick = btnImagemClick
+      end
+      object edtURLImagem: TEdit
+        Left = 192
+        Top = 168
+        Width = 118
+        Height = 23
+        TabOrder = 4
+      end
     end
   end
   object IdHTTP1: TIdHTTP
@@ -118,7 +230,7 @@ object frmPrincipal: TfrmPrincipal
     Request.Ranges.Units = 'bytes'
     Request.Ranges = <>
     HTTPOptions = [hoForceEncodeParams]
-    Left = 72
+    Left = 152
     Top = 48
   end
   object CdsProduto: TClientDataSet
@@ -166,5 +278,9 @@ object frmPrincipal: TfrmPrincipal
     DataSet = CdsProduto
     Left = 192
     Top = 128
+  end
+  object OpenDialog: TOpenDialog
+    Left = 412
+    Top = 235
   end
 end
