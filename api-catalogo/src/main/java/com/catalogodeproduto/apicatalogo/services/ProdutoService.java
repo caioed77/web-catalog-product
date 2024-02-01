@@ -2,8 +2,10 @@ package com.catalogodeproduto.apicatalogo.services;
 
 
 import com.catalogodeproduto.apicatalogo.dto.ProdutoDTO;
-import com.catalogodeproduto.apicatalogo.entities.CorProdutoEntity;
+import com.catalogodeproduto.apicatalogo.dto.RetornaProdutoDTO;
+import com.catalogodeproduto.apicatalogo.dto.RetornarCorProdutoDTO;
 import com.catalogodeproduto.apicatalogo.entities.ProdutoEntity;
+import com.catalogodeproduto.apicatalogo.exceptions.ResouceNotFoundException;
 import com.catalogodeproduto.apicatalogo.repositories.CorProdutoRepository;
 import com.catalogodeproduto.apicatalogo.repositories.ProdutoRepository;
 import jakarta.transaction.Transactional;
@@ -28,9 +30,9 @@ public class ProdutoService {
             this.corProdutoRepository = corProdutoRepository;
       }
 
-      public ProdutoDTO retornarProdutoPorID(Long id) {
-           var resultProduto = produtoRepository.findById(id).orElseThrow(() -> new RuntimeException("id do produto não encontrado"));
-            return new ProdutoDTO(
+      public RetornaProdutoDTO retornarProdutoPorID(Long id) {
+           var resultProduto = produtoRepository.findById(id).orElseThrow(() -> new ResouceNotFoundException(id));
+            return new RetornaProdutoDTO(
                     resultProduto.getId(),
                     resultProduto.getDescricao(),
                     resultProduto.getPrecoUnitario(),
@@ -39,32 +41,31 @@ public class ProdutoService {
       }
 
 
-      public Page<ProdutoDTO> retornarProdutos(Pageable pageable) {
+      public Page<RetornaProdutoDTO> retornarProdutos(Pageable pageable) {
             var result = produtoRepository.findAll(pageable);
-            var resultDTO = result.map(x -> new ProdutoDTO(x.getId(), x.getDescricao(), x.getPrecoUnitario(), x.getImagem(), x.getCores()));
-            return resultDTO;
+            return result.map(x -> new RetornaProdutoDTO(x.getId(), x.getDescricao(), x.getPrecoUnitario(), x.getImagem(), x.getCores()));
       }
 
       @Transactional
       public void gravarNovoProduto(ProdutoDTO produtoDTO) {
-            var produtos = new ProdutoEntity(produtoDTO.id(), produtoDTO.descricao(), produtoDTO.precoUnitario(), produtoDTO.imagem(), produtoDTO.cores());
-
-            var cores = new CorProdutoEntity();
-
-            for (var itemCor : produtos.cores) {
-               cores.setId(itemCor.getId());
-               cores.setDescricao(itemCor.getDescricao());
-               cores.setImagem(itemCor.getImagem());
-               cores.setProdutoId(itemCor.getProdutoId());
-            }
-
-            corProdutoRepository.save(cores);
-            produtoRepository.save(produtos);
+            produtoRepository.save(new ProdutoEntity(
+                    produtoDTO.id(),
+                    produtoDTO.descricao(),
+                    produtoDTO.precoUnitario(),
+                    produtoDTO.imagem(),
+                    null
+                    )
+            );
       }
 
-      public List<ProdutoDTO> listaProdutos() {
-         var lista =   produtoRepository.findAll();
-         var listaDTO = lista.stream().map(x -> new ProdutoDTO(x.getId(), x.getDescricao(), x.getPrecoUnitario(), x.getImagem(), x.getCores()));
-         return listaDTO.toList();
+      public List<RetornaProdutoDTO> listaProdutos() {
+            var produtos = produtoRepository.findAll();
+            return produtos.stream().map(x -> new RetornaProdutoDTO(x.getId(), x.getDescricao(), x.getPrecoUnitario(), x.getImagem(), x.getCores())).collect(Collectors.toList());
+      }
+
+      @Transactional
+      public void deletarProduto(Long id) {
+            var produtoDelete = produtoRepository.findById(id).orElseThrow(() -> new ResouceNotFoundException(id));
+            produtoRepository.delete(produtoDelete);
       }
 }

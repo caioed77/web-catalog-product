@@ -1,0 +1,119 @@
+object dmPrincipal: TdmPrincipal
+  OnCreate = DataModuleCreate
+  Height = 480
+  Width = 640
+  object CdsProduto: TClientDataSet
+    Aggregates = <>
+    FieldDefs = <>
+    IndexDefs = <>
+    Params = <>
+    StoreDefs = True
+    Left = 24
+    Top = 16
+    object CdsProdutoID: TIntegerField
+      FieldName = 'ID'
+    end
+    object CdsProdutoDESCRICAO: TStringField
+      FieldName = 'DESCRICAO'
+      Size = 255
+    end
+    object CdsProdutoPRECO: TFloatField
+      FieldName = 'PRECO'
+    end
+    object CdsProdutoIMAGEM: TStringField
+      FieldName = 'IMAGEM'
+      Size = 500
+    end
+  end
+  object CdsCores: TClientDataSet
+    Aggregates = <>
+    FieldDefs = <>
+    IndexDefs = <>
+    Params = <>
+    StoreDefs = True
+    Left = 24
+    Top = 80
+    object CdsCoresID: TIntegerField
+      FieldName = 'ID'
+    end
+    object CdsCoresDESCRICAO: TStringField
+      FieldName = 'DESCRICAO'
+      Size = 255
+    end
+    object CdsCoresIMAGEM: TStringField
+      FieldName = 'IMAGEM'
+      Size = 500
+    end
+    object CdsCoresPRODUTO_ID: TIntegerField
+      FieldName = 'PRODUTO_ID'
+    end
+  end
+  object dsCores: TDataSource
+    DataSet = CdsCores
+    Left = 80
+    Top = 80
+  end
+  object dsProduto: TDataSource
+    DataSet = CdsProduto
+    Left = 80
+    Top = 16
+  end
+  object CdsCadastroProduto: TClientDataSet
+    Aggregates = <>
+    FieldDefs = <>
+    IndexDefs = <>
+    Params = <>
+    StoreDefs = True
+    OnNewRecord = CdsCadastroProdutoNewRecord
+    Left = 24
+    Top = 155
+    object CdsCadastroProdutoID: TIntegerField
+      FieldName = 'ID'
+    end
+    object CdsCadastroProdutoDESCRICAO: TStringField
+      FieldName = 'DESCRICAO'
+      Size = 255
+    end
+    object CdsCadastroProdutoIMAGEM: TStringField
+      FieldName = 'IMAGEM'
+      Size = 500
+    end
+    object CdsCadastroProdutoPRECO: TFloatField
+      FieldName = 'PRECO'
+    end
+  end
+  object CdsCadastroCor: TClientDataSet
+    Aggregates = <>
+    FieldDefs = <>
+    IndexDefs = <>
+    Params = <>
+    StoreDefs = True
+    OnNewRecord = CdsCadastroCorNewRecord
+    Left = 16
+    Top = 216
+    object CdsCadastroCorID: TIntegerField
+      FieldName = 'ID'
+    end
+    object CdsCadastroCorDESCRICAO: TStringField
+      FieldName = 'DESCRICAO'
+      Size = 250
+    end
+    object CdsCadastroCorIMAGEM: TStringField
+      FieldName = 'IMAGEM'
+      Size = 500
+    end
+    object CdsCadastroCorPRODUTO_ID: TIntegerField
+      FieldName = 'PRODUTO_ID'
+    end
+  end
+  object dsCadastroCor: TDataSource
+    DataSet = CdsCadastroCor
+    Left = 80
+    Top = 216
+  end
+  object dsCadastroProduto: TDataSource
+    DataSet = CdsCadastroProduto
+    Left = 80
+    Top = 155
+  end
+end

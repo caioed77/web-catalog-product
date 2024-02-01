@@ -1,5 +1,6 @@
 package com.catalogodeproduto.apicatalogo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,8 @@ public class CorProdutoEntity {
       @Column(length = 500)
       public String imagem;
 
+      @JsonIgnore
       @ManyToOne
+      @JoinColumn(name = "PRODUTO_ID")
       public ProdutoEntity produtoId;
 }

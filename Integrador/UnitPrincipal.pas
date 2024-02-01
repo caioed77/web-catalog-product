@@ -11,51 +11,52 @@ uses
   IdAuthentication, IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
   IdHTTP, Vcl.StdCtrls, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Datasnap.DBClient, System.JSON,
   Vcl.Buttons, Vcl.ComCtrls, Vcl.CustomizeDlg, System.ImageList, Vcl.ImgList,
-  System.Win.TaskbarCore, Vcl.Taskbar;
+  System.Win.TaskbarCore, Vcl.Taskbar, Vcl.DBCtrls, Vcl.Mask, UnitDmPrincipal;
 
 type
   TfrmPrincipal = class(TForm)
     IdHTTP1: TIdHTTP;
-    CdsProduto: TClientDataSet;
-    dsCores: TDataSource;
-    CdsProdutoID: TIntegerField;
-    CdsProdutoDESCRICAO: TStringField;
-    CdsProdutoPRECO: TFloatField;
-    CdsProdutoIMAGEM: TStringField;
-    CdsCores: TClientDataSet;
-    dsProduto: TDataSource;
     Panel1: TPanel;
     Label1: TLabel;
-    CdsCoresID: TIntegerField;
-    CdsCoresDESCRICAO: TStringField;
-    CdsCoresIMAGEM: TStringField;
-    CdsCoresPRODUTO_ID: TIntegerField;
     Paginas: TPageControl;
     Review: TTabSheet;
     Panel2: TPanel;
     dbProduto: TDBGrid;
-    Panel3: TPanel;
-    dbCores: TDBGrid;
-    Cadastro: TTabSheet;
-    Label2: TLabel;
-    Label3: TLabel;
+    Produtos: TTabSheet;
     Panel4: TPanel;
-    btnGravarProduto: TBitBtn;
-    Edit1: TEdit;
-    Edit2: TEdit;
     OpenDialog: TOpenDialog;
-    btnImagem: TBitBtn;
-    edtURLImagem: TEdit;
-    Label4: TLabel;
     Panel5: TPanel;
     Label5: TLabel;
+    RadioGroup1: TRadioGroup;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Navegador: TDBNavigator;
+    btnSalvar: TSpeedButton;
+    btnDeletar: TSpeedButton;
+    edtDescricaoProduto: TDBEdit;
+    edtImagemProduto: TDBEdit;
+    edtPrecoUnit: TDBEdit;
+    btnNovoProduto: TSpeedButton;
+    Panel3: TPanel;
+    dbCores: TDBGrid;
+    Cores: TTabSheet;
+    btnImagemCor: TSpeedButton;
+    RadioGroup2: TRadioGroup;
+    Label9: TLabel;
+    edtDescricaoCor: TDBEdit;
+    edtImagemCor: TDBEdit;
+    Label7: TLabel;
+    btnImagemProduto: TSpeedButton;
     Label6: TLabel;
+    btnNovaCor: TSpeedButton;
     procedure FormCreate(Sender: TObject);
-    procedure btnGravarProdutoClick(Sender: TObject);
-    procedure btnImagemClick(Sender: TObject);
+    procedure btnImagemProdutoClick(Sender: TObject);
+    procedure btnSalvarClick(Sender: TObject);
+    procedure btnImagemCorClick(Sender: TObject);
+    procedure btnNovoProdutoClick(Sender: TObject);
+    procedure btnNovaCorClick(Sender: TObject);
   private
-    procedure PreencheCDSProduto(const JSONString: string);
-    procedure GravarProdutos;
     { Private declarations }
   public
     { Public declarations }
@@ -63,7 +64,7 @@ type
 
 var
   frmPrincipal: TfrmPrincipal;
-  IdHTTP: TIdHTTP;
+  IdHTTPGet: TIdHTTP;
   Response: string;
   JSONObj: TJSONObject;
   CoresArray: TJSONArray;
@@ -76,144 +77,47 @@ implementation
 {$R *.dfm}
 
 
-procedure TfrmPrincipal.btnImagemClick(Sender: TObject);
+procedure TfrmPrincipal.btnSalvarClick(Sender: TObject);
 begin
-  if OpenDialog.Execute then
-  begin
-    edtURLImagem.Text := OpenDialog.FileName;
-
-    CdsProduto.Edit;
-    CdsProdutoIMAGEM.Value := edtURLImagem.Text;
-  end;
+  dmPrincipal.GravarNovosProdutos;
 end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
-  CdsProduto.CreateDataSet;
-  CdsCores.CreateDataSet;
-
-  IdHTTP := TIdHTTP.Create(nil);
+  IdHTTPGet := TIdHTTP.Create(nil);
 
   try
-    Response := IdHTTP.Get(urlListaProduto);
+    Response := IdHTTPGet.Get(urlListaProduto);
   finally
-    IdHTTP.Free;
+    IdHTTPGet.Free;
   end;
 
-  PreencheCDSProduto(Response);
+  dmPrincipal := TdmPrincipal.Create(Self);
+
+  dmPrincipal.BuscarProdutos(Response);
 end;
 
-procedure TfrmPrincipal.GravarProdutos;
-var
-  JSONToSend: TJSONObject;
-  JSONArrayProdutos, JSONArrayCores: TJSONArray;
-  JSONProduto, JSONCor: TJSONObject;
-  JSONString: string;
-  Stream: TStringStream;
-
+procedure TfrmPrincipal.btnImagemCorClick(Sender: TObject);
 begin
-  IdHTTP := TIdHTTP.Create(nil);
-  JSONToSend := TJSONObject.Create;
-  JSONArrayProdutos := TJSONArray.Create;
-  JSONArrayCores := TJSONArray.Create;
-
-  try
-    cdsProduto.First;
-
-    while not cdsProduto.Eof do
-    begin
-      JSONProduto := TJSONObject.Create;
-      JSONProduto.AddPair('id', IntToStr(cdsProdutoID.Value));
-      JSONProduto.AddPair('descricao', cdsProdutoDESCRICAO.Value);
-      JSONProduto.AddPair('precoUnitario', FloatToStr(cdsProdutoPRECO.Value));
-      JSONProduto.AddPair('imagem', cdsProdutoIMAGEM.Value);
-
-      cdsCores.Filter := 'PRODUTO_ID = ' + IntToStr(cdsProdutoID.Value);
-
-      cdsCores.First;
-      while not cdsCores.Eof do
-      begin
-        JSONCor := TJSONObject.Create;
-        JSONCor.AddPair('id', IntToStr(CdsCoresID.Value));
-        JSONCor.AddPair('descricao', cdsCoresDESCRICAO.Value);
-        JSONCor.AddPair('imagem', cdsCoresIMAGEM.Value);
-        JSONCor.AddPair('produto_id', CdsCoresPRODUTO_ID.Value);
-        JSONArrayCores.AddElement(JSONCor);
-
-        cdsCores.Next;
-      end;
-
-      JSONProduto.AddPair('cores', JSONArrayCores);
-      JSONArrayProdutos.AddElement(JSONProduto);
-
-      cdsProduto.Next;
-    end;
-
-
-    Stream := TStringStream.Create(JSONArrayProdutos.Items[0].ToString, TEncoding.UTF8);
-
-    ShowMessage(Stream.ToString);
-     try
-      IdHTTP.Request.ContentType := 'application/json';
-      IdHTTP.Post(urlGravarProduto, Stream);
-    finally
-      Stream.Free;
-    end;
-
-  finally
-    IdHTTP.Free;
-    JSONToSend.Free;
-  end;
+  if OpenDialog.Execute then
+    edtImagemProduto.Text := OpenDialog.FileName;
 end;
 
-procedure TfrmPrincipal.PreencheCDSProduto(const JSONString: string);
-var JSONArray: TJSONArray;
-    JSONValue: TJSONValue;
-    JSONObj: TJSONObject;
-    CoresArray: TJSONArray;
-    Cor: TJSONValue;
+procedure TfrmPrincipal.btnImagemProdutoClick(Sender: TObject);
 begin
-  JSONArray := TJSONObject.ParseJSONValue(JSONString) as TJSONArray;
-
-  try
-    cdsProduto.EmptyDataSet;
-
-    for JSONValue in JSONArray do
-    begin
-      if JSONValue is TJSONObject then
-      begin
-        JSONObj := JSONValue as TJSONObject;
-
-        if not CdsProduto.Locate('ID', JSONObj.GetValue('id').Value, []) then
-          cdsProduto.Append
-        else
-          cdsProduto.Edit;
-
-        CdsProdutoID.Value := StrToIntDef(JSONObj.GetValue('id').Value, 0);
-        CdsProdutoDESCRICAO.Value := JSONObj.GetValue('descricao').Value;
-        CdsProdutoPRECO.Value := StrToFloatDef(JSONObj.GetValue('precoUnitario').Value, 0.0);
-        CdsProdutoIMAGEM.Value := JSONObj.GetValue('imagem').Value;
-        cdsProduto.Post;
-
-        cdsCores.EmptyDataSet;
-        CoresArray := JSONObj.GetValue('cores') as TJSONArray;
-
-        for Cor in CoresArray do
-        begin
-          cdsCores.Append;
-          cdsCores.FieldByName('Cor').AsString := Cor.Value;
-          cdsCores.Post;
-        end;
-      end;
-    end;
-  finally
-    JSONArray.Free;
-  end;
+  if OpenDialog.Execute then
+    edtImagemCor.Text := OpenDialog.FileName;
 end;
 
-procedure TfrmPrincipal.btnGravarProdutoClick(Sender: TObject);
+procedure TfrmPrincipal.btnNovaCorClick(Sender: TObject);
 begin
-  GravarProdutos;
+  dmPrincipal.cdsCores.Append;
+  Paginas.ActivePageIndex := 2;
+end;
+
+procedure TfrmPrincipal.btnNovoProdutoClick(Sender: TObject);
+begin
+  dmPrincipal.cdsProduto.Insert;
 end;
 
 end.
