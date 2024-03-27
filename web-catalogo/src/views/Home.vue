@@ -9,11 +9,11 @@
             Bem vindo ao catalogo digital
           </h1>
           <p class="mt-4 text-xl text-gray-500">
-            Aqui você visualiza os melhores calçados da região.
+            Aqui você visualiza os melhores produtos da região.
           </p>
         </div>
         <div>
-          <div class="mt-10">
+          <div class="mt-10 mb-16">
             <div
               aria-hidden="true"
               class="pointer-events-none lg:absolute lg:inset-y-0 lg:mx-auto lg:w-full lg:max-w-7xl"
@@ -23,7 +23,7 @@
               >
                 <div class="flex items-center space-x-6 lg:space-x-8">
                   <div
-                    class="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8"
+                    class="grid flex-shrink-0 grid-cols-1 gap-y-2 lg:gap-y-2"
                   >
                     <div
                       class="h-64 w-44 overflow-hidden rounded-lg sm:opacity-0 lg:opacity-100"
@@ -58,14 +58,7 @@
                         alt=""
                         class="h-full w-full object-cover object-center"
                       />
-                    </div>
-                    <div class="h-64 w-44 overflow-hidden rounded-lg">
-                      <img
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-05.jpg"
-                        alt=""
-                        class="h-full w-full object-cover object-center"
-                      />
-                    </div>
+                    </div>                    
                   </div>
                   <div
                     class="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8"
@@ -88,12 +81,18 @@
                 </div>
               </div>
             </div>
-
-            <a
-              href="/#/dashboard/produtos"
-              class="inline-block rounded-md border border-transparent bg-black px-8 py-3 text-center font-medium text-white hover:bg-indigo-700"
-              >Visualizar</a
-            >
+            <div class="flex flex-col gap-2 w-52">
+              <a
+                href="/#/dashboard/produtos"
+                class="rounded-md border border-transparent bg-black px-8 py-3 text-center font-medium text-white hover:bg-indigo-700"
+                >Visualizar</a
+              >
+              <a
+                href="/#/dashboard/produtos"
+                class="rounded-md border border-transparent bg-black px-8 py-3 text-center font-medium text-white hover:bg-indigo-700"
+                >Login</a
+              >
+            </div>
           </div>
         </div>
       </div>
