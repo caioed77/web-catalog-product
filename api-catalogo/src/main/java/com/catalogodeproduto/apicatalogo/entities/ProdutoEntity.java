@@ -28,6 +28,11 @@ public class ProdutoEntity {
       @Column(length = 500)
       private String imagem;
 
-      @OneToMany(mappedBy = "produtoId")
-      public List<CorProdutoEntity> cores = new ArrayList<>();
+      @ManyToMany
+      @JoinTable(
+              name = "produto_cor",
+              joinColumns = @JoinColumn(name = "produto_id"),
+              inverseJoinColumns = @JoinColumn(name = "cor_id")
+      )
+      private List<CorProdutoEntity> cores;
 }

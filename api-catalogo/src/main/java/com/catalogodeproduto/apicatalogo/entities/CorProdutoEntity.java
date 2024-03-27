@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Data
 @AllArgsConstructor
@@ -16,15 +18,14 @@ public class CorProdutoEntity {
 
       @Id
       @GeneratedValue(strategy = GenerationType.IDENTITY)
-      public Long id;
+      private Long id;
 
-      public String descricao;
+      private String descricao;
 
       @Column(length = 500)
-      public String imagem;
+      private String imagem;
 
       @JsonIgnore
-      @ManyToOne
-      @JoinColumn(name = "PRODUTO_ID")
-      public ProdutoEntity produtoId;
+      @ManyToMany(mappedBy = "cores")
+      private List<ProdutoEntity> produtos;
 }

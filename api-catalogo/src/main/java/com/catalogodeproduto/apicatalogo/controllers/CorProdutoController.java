@@ -24,12 +24,4 @@ public class CorProdutoController {
      public ResponseEntity<List<RetornarCorProdutoDTO>> retornaCores() {
           return ResponseEntity.ok(corProdutoService.listarCores());
      }
-     
-     @PostMapping(value = "/gravarCor")
-     @ResponseStatus(HttpStatus.CREATED)
-     public ResponseEntity gravarCores(@RequestBody CorProdutoDTO corProdutoDTO) {
-          corProdutoService.gravarNovaCor(corProdutoDTO);
-          return ResponseEntity.ok().build();
-     }
-     
 }

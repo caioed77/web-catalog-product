@@ -88,7 +88,7 @@
                 >Visualizar</a
               >
               <a
-                href="/#/dashboard/produtos"
+                href="/#/login"
                 class="rounded-md border border-transparent bg-black px-8 py-3 text-center font-medium text-white hover:bg-indigo-700"
                 >Login</a
               >

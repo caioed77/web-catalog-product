@@ -26,13 +26,6 @@ public class CorProdutoService {
             this.corProdutoRepository = corProdutoRepository;
       }
 
-      @Transactional
-      public void gravarNovaCor(CorProdutoDTO corProdutoDTO) {
-           var produto = produtoRepository.findById(Long.valueOf(corProdutoDTO.produtoId())).orElseThrow(() -> new ResouceNotFoundException(corProdutoDTO.produtoId()));
-           var novaCor = new  CorProdutoEntity(corProdutoDTO.id(), corProdutoDTO.descricao(), corProdutoDTO.imagem(), produto);
-           corProdutoRepository.save(novaCor);
-      }
-
       public List<RetornarCorProdutoDTO> listarCores() {
             var cores = corProdutoRepository.findAll();
             return cores.stream().map(x -> new RetornarCorProdutoDTO(x.getId(), x.getDescricao(), x.getImagem())).collect(Collectors.toList());
