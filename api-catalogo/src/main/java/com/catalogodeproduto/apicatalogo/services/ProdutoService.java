@@ -24,14 +24,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProdutoService {
-
-
       private final ProdutoRepository produtoRepository;
 
       private final CorProdutoRepository corProdutoRepository;
 
       private final PlatformTransactionManager transactionManager;
-
 
       public ProdutoService(ProdutoRepository produtoRepository, CorProdutoRepository corProdutoRepository, PlatformTransactionManager transactionManager) {
             this.produtoRepository = produtoRepository;
