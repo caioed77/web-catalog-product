@@ -1,52 +1,48 @@
 package com.catalogodeproduto.apicatalogo.controllers;
 
 
-import com.catalogodeproduto.apicatalogo.config.JwtTokenUtilConfig;
-import com.catalogodeproduto.apicatalogo.dto.JwtTokenDTO;
+import com.catalogodeproduto.apicatalogo.dto.AuthenticationDTO;
+import com.catalogodeproduto.apicatalogo.dto.RegisterDTO;
 import com.catalogodeproduto.apicatalogo.dto.UsuarioDTO;
-import com.catalogodeproduto.apicatalogo.services.JwtUserDetailsService;
+import com.catalogodeproduto.apicatalogo.exceptions.UsuarioNaoAutorizadoException;
+import com.catalogodeproduto.apicatalogo.services.AuthenticationService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
-@CrossOrigin
-@RequestMapping(value = "/auth")
+@RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-   private final AuthenticationManager authenticationManager;
-   private final JwtUserDetailsService userDetailsService;
-   private final JwtTokenUtilConfig jwtTokenUtilConfig;
+      private final AuthenticationService service;
 
-   public AuthController(AuthenticationManager authenticationManager, JwtTokenUtilConfig jwtTokenUtilConfig, JwtUserDetailsService userDetailsService){
-       this.authenticationManager = authenticationManager;
-       this.jwtTokenUtilConfig = jwtTokenUtilConfig;
-       this.userDetailsService = userDetailsService;
-   }
+      @PostMapping("/register")
+      public ResponseEntity<AuthenticationDTO> register(
+              @RequestBody RegisterDTO request
+      ) {
+            return ResponseEntity.ok(service.register(request));
+      }
+      @PostMapping("/authenticate")
+      public ResponseEntity<AuthenticationDTO> authenticate(
+              @RequestBody UsuarioDTO request
+      ) throws UsuarioNaoAutorizadoException {
+            return ResponseEntity.ok(service.authenticate(request));
+      }
 
-    @PostMapping(value = "/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody UsuarioDTO authenticationRequest) throws Exception {
-        authenticate(authenticationRequest.email(), authenticationRequest.senha());
-        final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.email());
-        final String token = jwtTokenUtilConfig.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtTokenDTO(token));
-    }
-
-
-    private void authenticate(String username, String password) throws Exception {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
-        }
-    }
+      @PostMapping("/refresh-token")
+      public void refreshToken(
+              HttpServletRequest request,
+              HttpServletResponse response
+      ) throws IOException {
+            service.refreshToken(request, response);
+      }
 
 
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/cores")
+@RequestMapping("/api/v1/cores")
 public class CorProdutoController {
       
      private final CorProdutoService corProdutoService;

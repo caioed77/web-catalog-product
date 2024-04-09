@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/usuario")
+@RequestMapping("/api/v1/usuario")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -16,10 +16,4 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    @PostMapping(value = "/cadastro")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> createUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        usuarioService.criarUsuario(usuarioDTO);
-        return ResponseEntity.ok().build();
-    }
 }

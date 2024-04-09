@@ -2,6 +2,7 @@ package com.catalogodeproduto.apicatalogo.controllers.exception;
 
 import com.catalogodeproduto.apicatalogo.exceptions.RegrasDeNegocioException;
 import com.catalogodeproduto.apicatalogo.exceptions.ResouceNotFoundException;
+import com.catalogodeproduto.apicatalogo.exceptions.UsuarioNaoAutorizadoException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,4 +29,13 @@ public class ResourceExceptionHandler {
             return ResponseEntity.status(status).body(err);
 
       }
+
+      @ExceptionHandler(UsuarioNaoAutorizadoException.class)
+      public ResponseEntity<StandardError> userUnauthorized(UsuarioNaoAutorizadoException e, HttpServletRequest request) {
+            HttpStatus status = HttpStatus.UNAUTHORIZED;
+            StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Não autorizado", e.getMessage(), request.getRequestURI());
+
+            return ResponseEntity.status(status).body(err);
+      }
+
 }
