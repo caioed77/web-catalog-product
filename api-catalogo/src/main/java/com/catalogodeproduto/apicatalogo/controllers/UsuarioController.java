@@ -15,5 +15,4 @@ public class UsuarioController {
     public UsuarioController(UsuarioService usuarioService){
         this.usuarioService = usuarioService;
     }
-
 }

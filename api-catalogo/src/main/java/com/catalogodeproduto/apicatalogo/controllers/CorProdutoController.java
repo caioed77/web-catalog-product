@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -17,11 +18,18 @@ public class CorProdutoController {
       
      public CorProdutoController(CorProdutoService corProdutoService) {
            this.corProdutoService = corProdutoService;
-     } 
-     
-     
+     }
+
+
      @GetMapping(value = "/listagem")
      public ResponseEntity<List<RetornarCorProdutoDTO>> retornaCores() {
           return ResponseEntity.ok(corProdutoService.listarCores());
      }
+
+     @PostMapping(value = "{produtoId}/criarCorProduto")
+     public ResponseEntity<Void> criarNovaCorProduto(@PathVariable Long produtoId, @RequestBody List<CorProdutoDTO> corProdutoDTO) {
+          corProdutoService.GravarCor(produtoId, corProdutoDTO);
+          return  ResponseEntity.status(HttpStatus.CREATED).build();
+     }
+
 }

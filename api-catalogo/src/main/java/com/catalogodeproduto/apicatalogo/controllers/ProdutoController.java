@@ -16,15 +16,11 @@ import java.util.List;
 @RequestMapping("/api/v1/produtos")
 public class ProdutoController {
 
-      private final ProdutoRepository produtoRepository;
-
       private final ProdutoService produtoService;
 
-      public ProdutoController(ProdutoRepository produtoRepository, ProdutoService produtoService) {
-            this.produtoRepository =  produtoRepository;
+      public ProdutoController(ProdutoService produtoService) {
             this.produtoService = produtoService;
       }
-
 
       @PostMapping(value = "/gravarProduto")
       @ResponseStatus(code = HttpStatus.CREATED)
