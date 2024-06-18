@@ -1,4 +1,4 @@
-package com.catalogodeproduto.apicatalogo.dto;
+package com.catalogodeproduto.apicatalogo.domain.dto;
 
 import com.catalogodeproduto.apicatalogo.entities.CorProdutoEntity;
 

@@ -1,19 +1,13 @@
 package com.catalogodeproduto.apicatalogo.services;
 
-import com.catalogodeproduto.apicatalogo.dto.ChangePasswordDTO;
-import com.catalogodeproduto.apicatalogo.dto.UsuarioDTO;
+import com.catalogodeproduto.apicatalogo.domain.dto.ChangePasswordDTO;
 import com.catalogodeproduto.apicatalogo.entities.UsuarioEntity;
-import com.catalogodeproduto.apicatalogo.exceptions.RegrasDeNegocioException;
 import com.catalogodeproduto.apicatalogo.repositories.UsuarioRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.Optional;
 
 @Service
 public class UsuarioService {

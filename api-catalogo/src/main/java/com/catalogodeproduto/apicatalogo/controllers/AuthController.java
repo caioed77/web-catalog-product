@@ -1,16 +1,14 @@
 package com.catalogodeproduto.apicatalogo.controllers;
 
 
-import com.catalogodeproduto.apicatalogo.dto.AuthenticationDTO;
-import com.catalogodeproduto.apicatalogo.dto.RegisterDTO;
-import com.catalogodeproduto.apicatalogo.dto.UsuarioDTO;
+import com.catalogodeproduto.apicatalogo.domain.dto.AuthenticationDTO;
+import com.catalogodeproduto.apicatalogo.domain.dto.RegisterDTO;
+import com.catalogodeproduto.apicatalogo.domain.dto.UsuarioDTO;
 import com.catalogodeproduto.apicatalogo.exceptions.UsuarioNaoAutorizadoException;
 import com.catalogodeproduto.apicatalogo.services.AuthenticationService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

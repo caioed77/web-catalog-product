@@ -1,8 +1,8 @@
 package com.catalogodeproduto.apicatalogo.services;
 
 
-import com.catalogodeproduto.apicatalogo.dto.CorProdutoDTO;
-import com.catalogodeproduto.apicatalogo.dto.RetornarCorProdutoDTO;
+import com.catalogodeproduto.apicatalogo.domain.dto.CorProdutoDTO;
+import com.catalogodeproduto.apicatalogo.domain.dto.RetornarCorProdutoDTO;
 import com.catalogodeproduto.apicatalogo.entities.CorProdutoEntity;
 import com.catalogodeproduto.apicatalogo.exceptions.ResouceNotFoundException;
 import com.catalogodeproduto.apicatalogo.repositories.CorProdutoRepository;
@@ -25,16 +25,16 @@ public class CorProdutoService {
             this.corProdutoRepository = corProdutoRepository;
       }
 
-      public List<RetornarCorProdutoDTO> listarCores() {
+      public List<CorProdutoDTO> listarCores() {
             var cores = corProdutoRepository.findAll();
-            return cores.stream().map(x -> new RetornarCorProdutoDTO(x.getId(), x.getDescricao(), x.getImagem())).collect(Collectors.toList());
+            return cores.stream().map(x -> new CorProdutoDTO(x.getId(), x.getDescricao(), x.getImagem())).collect(Collectors.toList());
       }
 
       public void GravarCor(Long produtoId, List<CorProdutoDTO> corProdutoDTO) {
             var produto = produtoRepository.findById(produtoId)
                     .orElseThrow(() -> new ResouceNotFoundException(produtoId));
 
-            List<CorProdutoEntity> corProduto = corProdutoDTO.stream()
+            List<CorProdutoEntity> novasCores = corProdutoDTO.stream()
                     .map(dto -> {
                           CorProdutoEntity entity = new CorProdutoEntity();
                           entity.setDescricao(dto.descricao());
@@ -44,7 +44,27 @@ public class CorProdutoService {
                     .map(corProdutoRepository::save)
                     .collect(Collectors.toList());
 
-            produto.setCores(corProduto);
+            List<CorProdutoEntity>coresExistentes = produto.getCores();
+
+            if (coresExistentes == null || coresExistentes.isEmpty()) {
+                  coresExistentes = novasCores;
+            } else {
+                  coresExistentes.addAll(novasCores);
+            }
+
+            produto.setCores(coresExistentes);
             produtoRepository.save(produto);
+      }
+
+      public List<RetornarCorProdutoDTO> listaCorProduto(Long produtoId) {
+            var produtoCor = corProdutoRepository.listarCorProduto(produtoId);
+
+            return produtoCor.stream()
+                    .map(x -> new RetornarCorProdutoDTO(
+                                    x.getIdCor(),
+                                    x.getDescricaoCor(),
+                                    x.getDescricaoProduto(),
+                                    x.getImagemProduto()))
+                    .toList();
       }
 }

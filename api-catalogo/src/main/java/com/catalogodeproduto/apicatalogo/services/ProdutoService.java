@@ -1,8 +1,8 @@
 package com.catalogodeproduto.apicatalogo.services;
 
 
-import com.catalogodeproduto.apicatalogo.dto.ProdutoDTO;
-import com.catalogodeproduto.apicatalogo.dto.RetornaProdutoDTO;
+import com.catalogodeproduto.apicatalogo.domain.dto.ProdutoDTO;
+import com.catalogodeproduto.apicatalogo.domain.dto.RetornaProdutoDTO;
 import com.catalogodeproduto.apicatalogo.entities.ProdutoEntity;
 import com.catalogodeproduto.apicatalogo.exceptions.RegrasDeNegocioException;
 import com.catalogodeproduto.apicatalogo.exceptions.ResouceNotFoundException;
@@ -16,6 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.List;
+
 
 @Service
 public class ProdutoService {

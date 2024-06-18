@@ -2,9 +2,9 @@ package com.catalogodeproduto.apicatalogo.services;
 
 
 import com.catalogodeproduto.apicatalogo.config.JwtServiceConfig;
-import com.catalogodeproduto.apicatalogo.dto.AuthenticationDTO;
-import com.catalogodeproduto.apicatalogo.dto.RegisterDTO;
-import com.catalogodeproduto.apicatalogo.dto.UsuarioDTO;
+import com.catalogodeproduto.apicatalogo.domain.dto.AuthenticationDTO;
+import com.catalogodeproduto.apicatalogo.domain.dto.RegisterDTO;
+import com.catalogodeproduto.apicatalogo.domain.dto.UsuarioDTO;
 import com.catalogodeproduto.apicatalogo.entities.TokenEntity;
 import com.catalogodeproduto.apicatalogo.entities.UsuarioEntity;
 import com.catalogodeproduto.apicatalogo.entities.enumEntities.TokenType;

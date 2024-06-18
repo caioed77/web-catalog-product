@@ -19,20 +19,10 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static com.catalogodeproduto.apicatalogo.entities.enumEntities.PermissionEnum.ADMIN_CREATE;
-import static com.catalogodeproduto.apicatalogo.entities.enumEntities.PermissionEnum.ADMIN_DELETE;
-import static com.catalogodeproduto.apicatalogo.entities.enumEntities.PermissionEnum.ADMIN_READ;
-import static com.catalogodeproduto.apicatalogo.entities.enumEntities.PermissionEnum.ADMIN_UPDATE;
-import static com.catalogodeproduto.apicatalogo.entities.enumEntities.PermissionEnum.MANAGER_CREATE;
-import static com.catalogodeproduto.apicatalogo.entities.enumEntities.PermissionEnum.MANAGER_DELETE;
-import static com.catalogodeproduto.apicatalogo.entities.enumEntities.PermissionEnum.MANAGER_READ;
-import static com.catalogodeproduto.apicatalogo.entities.enumEntities.PermissionEnum.MANAGER_UPDATE;
+import static com.catalogodeproduto.apicatalogo.entities.enumEntities.PermissionEnum.*;
 import static com.catalogodeproduto.apicatalogo.entities.enumEntities.RoleEnum.ADMIN;
 import static com.catalogodeproduto.apicatalogo.entities.enumEntities.RoleEnum.MANAGER;
-import static org.springframework.http.HttpMethod.DELETE;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -51,7 +41,9 @@ public class SecurityConfig {
               "/configuration/security",
               "/swagger-ui/**",
               "/webjars/**",
-              "/swagger-ui.html"};
+              "/swagger-ui.html",
+              "/api/v1/produtos/**"
+      };
 
       @Autowired
       private JwtAuthFilter jwtAuthFilter;
@@ -96,6 +88,8 @@ public class SecurityConfig {
                                     .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
                     )
             ;
+
+            jwtAuthFilter.setWhiteListUrls(WHITE_LIST_URL);
 
             return http.build();
       }

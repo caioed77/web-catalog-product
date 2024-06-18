@@ -1,8 +1,7 @@
 package com.catalogodeproduto.apicatalogo.controllers;
 
-import com.catalogodeproduto.apicatalogo.dto.ProdutoDTO;
-import com.catalogodeproduto.apicatalogo.dto.RetornaProdutoDTO;
-import com.catalogodeproduto.apicatalogo.repositories.ProdutoRepository;
+import com.catalogodeproduto.apicatalogo.domain.dto.ProdutoDTO;
+import com.catalogodeproduto.apicatalogo.domain.dto.RetornaProdutoDTO;
 import com.catalogodeproduto.apicatalogo.services.ProdutoService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

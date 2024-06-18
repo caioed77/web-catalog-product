@@ -1,9 +1,6 @@
 package com.catalogodeproduto.apicatalogo.controllers;
 
-import com.catalogodeproduto.apicatalogo.dto.UsuarioDTO;
 import com.catalogodeproduto.apicatalogo.services.UsuarioService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
